@@ -17,6 +17,7 @@ import com.mymart.storeservice.dto.BranchCreateRes;
 import com.mymart.storeservice.dto.BranchUpdateReq;
 import com.mymart.storeservice.dto.BranchUpdateRes;
 import com.mymart.storeservice.entity.Branch;
+import com.mymart.storeservice.exceptions.BranchCreationException;
 
 @Service
 public class BranchServiceImpl implements BranchService{
@@ -30,13 +31,19 @@ public class BranchServiceImpl implements BranchService{
 	@Override
 	public BranchCreateRes storeBranch(BranchCreateReq branchDto) {
 		
-		Branch branch = modelMapper.map(branchDto, Branch.class);
+		//Imperative
+//		Branch branch = modelMapper.map(branchDto, Branch.class);
+//		branch = branchDao.save(branch);
+//		BranchCreateRes branchResponseDto = modelMapper.map(branch, BranchCreateRes.class);
+//		
+//		return branchResponseDto;
 		
-		branch = branchDao.save(branch);
-		
-		BranchCreateRes branchResponseDto = modelMapper.map(branch, BranchCreateRes.class);
-		
-		return branchResponseDto;
+		//Declarative
+		return Optional.of(branchDto)
+				.map(branch -> modelMapper.map(branch, Branch.class))
+				.map(branchDao::save)
+				.map(savedBranch -> modelMapper.map(savedBranch, BranchCreateRes.class))
+				.orElseThrow(()-> new BranchCreationException("Failed to save branch"));
 	}
 
 	@Override
@@ -60,26 +67,29 @@ public class BranchServiceImpl implements BranchService{
 	        return null;
 	    }
 		
-		Branch branch = branches.get();
+//		Branch branch = branches.get();
+//		BranchCreateRes branchResponseDto = modelMapper.map(branch, BranchCreateRes.class);
+//		
+//		return branchResponseDto;
 		
-		BranchCreateRes branchResponseDto = modelMapper.map(branch, BranchCreateRes.class);
-		
-		return branchResponseDto;
+		return branches.map(branch -> modelMapper.map(branch, BranchCreateRes.class)).orElse(null);
 	}
 
 	@Override
 	public BranchCreateRes updateBranch(BranchCreateReq branchRequestDto, String branchId) {
 		
-		Optional<Branch> branches = branchDao.findById(Integer.parseInt(branchId));
-		
-		Branch existingBranch = branches.get();
+//		Optional<Branch> branches = branchDao.findById(Integer.parseInt(branchId));	
+//		Branch existingBranch = branches.get();
+
+		Branch existingBranch = Optional.of(branchId)
+				.map(id -> Integer.parseInt(id))
+				.flatMap(branchDao::findById)
+				.orElse(null);
 		
 		existingBranch = modelMapper.map(branchRequestDto, Branch.class);
-		
-		Branch updatedBranch = branchDao.save(existingBranch);
-		
+		Branch updatedBranch = branchDao.save(existingBranch);		
 		BranchCreateRes branchResponseDto = modelMapper.map(updatedBranch, BranchCreateRes.class);
-		
+
 		return branchResponseDto;
 	}
 
@@ -110,7 +120,6 @@ public class BranchServiceImpl implements BranchService{
 		return branches.stream()
 				.map(branch -> modelMapper.map(branch, BranchCreateRes.class))
 				.collect(Collectors.toList());
-		
 	}
 
 	@Override
