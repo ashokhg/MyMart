@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -38,6 +39,18 @@ public class GlobalExceptionHandler {
         errorBody.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
 		
 		return ResponseEntity.internalServerError().body(errorBody);
+	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Map<String, Object>> handlerValidationException(MethodArgumentNotValidException ex){
+		
+		Map<String, Object> errorBody = new HashMap<>();
+		
+		ex.getBindingResult().getFieldErrors().forEach(error -> {
+			errorBody.put(error.getField(), error.getDefaultMessage());
+		});
+		
+		return new ResponseEntity<>(errorBody, HttpStatus.BAD_REQUEST);
 	}
 	
 	 @ExceptionHandler(RuntimeException.class)

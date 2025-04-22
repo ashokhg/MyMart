@@ -41,16 +41,16 @@ public class BranchController {
 	public ResponseEntity<?> createBranch(@Valid @RequestBody BranchCreateReq branchDto, BindingResult bindingResult) {
 				
 		BranchCreateRes branchResponseDto = branchService.storeBranch(branchDto);
-				
-		if(bindingResult.hasErrors()) {
-			return 	ResponseEntity.badRequest().body(
-					
-						bindingResult.getFieldErrors().stream()
-													.map(error -> error.getField() + ": "+ error.getDefaultMessage())
-													.toList()
-					);
-					
-		}
+		
+		//handled in global exceptions
+//		if(bindingResult.hasErrors()) {
+//			return 	ResponseEntity.badRequest().body(
+//					
+//						bindingResult.getFieldErrors().stream()
+//													.map(error -> error.getField() + ": "+ error.getDefaultMessage())
+//													.toList()
+//					);
+//		}
 		
 		return ResponseEntity.ok().body(branchResponseDto);
 	}
@@ -76,14 +76,15 @@ public class BranchController {
 		
 		BranchCreateRes branchResponseDto = branchService.updateBranch(branchDto, branchId);
 		
-		if(bindingResult.hasErrors()) {
-			return ResponseEntity.badRequest().body(
-					bindingResult.getFieldErrors().stream()
-													.map(error -> error.getField() +": "+error.getDefaultMessage())
-													.toList()
-					
-					);
-		}
+		//handled in global excpetions
+//		if(bindingResult.hasErrors()) {
+//			return ResponseEntity.badRequest().body(
+//					bindingResult.getFieldErrors().stream()
+//													.map(error -> error.getField() +": "+error.getDefaultMessage())
+//													.toList()
+//					);
+//		}
+		
 		return ResponseEntity.ok().body(branchResponseDto);
 	}
 	
