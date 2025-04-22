@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.mymart.storeservice.dto.BranchUpdateRes;
 import com.mymart.storeservice.service.BranchService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/branch")
@@ -36,10 +38,18 @@ public class BranchController {
 	BranchService branchService;
 	
 	@PostMapping("/create-branch")
-	public ResponseEntity<BranchCreateRes> createBranch(@RequestBody BranchCreateReq branchDto) {
+	public ResponseEntity<?> createBranch(@Valid @RequestBody BranchCreateReq branchDto, BindingResult bindingResult) {
 				
 		BranchCreateRes branchResponseDto = branchService.storeBranch(branchDto);
 				
+		if(bindingResult.hasErrors()) {
+			return 	ResponseEntity.badRequest().body(
+					
+						bindingResult.getFieldErrors().stream().map(error -> error.getField() + ": "+ error.getDefaultMessage()).toList()
+					);
+					
+		}
+		
 		return ResponseEntity.ok().body(branchResponseDto);
 	}
 	

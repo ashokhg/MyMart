@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.mymart.storeservice.exceptions.BranchCreationException;
+import com.mymart.storeservice.exceptions.BranchNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -27,12 +28,24 @@ public class GlobalExceptionHandler {
 		
 	}
 	
+	@ExceptionHandler(BranchNotFoundException.class)
+	public ResponseEntity<Map<String, Object>> handlerBranchNotFoundException(BranchNotFoundException ex){
+		
+		Map<String, Object> errorBody = new HashMap<>();
+		errorBody.put("time", LocalDateTime.now());
+		errorBody.put("error", "branch not found");
+		errorBody.put("message", ex.getMessage());
+        errorBody.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
+		
+		return ResponseEntity.internalServerError().body(errorBody);
+	}
+	
 	 @ExceptionHandler(RuntimeException.class)
      public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
 	 
         Map<String, Object> errorBody = new HashMap<>();
         errorBody.put("timestamp", LocalDateTime.now());
-        errorBody.put("error", "Server Error");
+        errorBody.put("error", "server Error");
         errorBody.put("message", ex.getMessage());
         errorBody.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());
 

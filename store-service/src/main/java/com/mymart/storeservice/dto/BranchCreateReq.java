@@ -1,11 +1,25 @@
 package com.mymart.storeservice.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class BranchCreateReq {
 
+	@NotBlank(message = "Name is required")
 	private String name;
+	
+	@NotNull
 	private LocationDto location;
+	
+	@Size(min = 10, message = "Contacter number size should be min 10")
 	private String contactNumber;
+	
+	@Email(message = "Invalid email format")
 	private String email;
+	
+	@NotBlank
 	private String managerName;
 	
 	public String getName() {

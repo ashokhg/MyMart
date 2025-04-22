@@ -61,10 +61,11 @@ public class BranchServiceImpl implements BranchService{
 	@Override
 	public BranchCreateRes getBranchbyId(String branchId) {
 		
-		Optional<Branch> branches = branchDao.findById(Integer.parseInt(branchId));
+		Optional<Branch> branch = branchDao.findById(Integer.parseInt(branchId));
 		
-		if (branches.isEmpty()) {
-	        return null;
+		if (branch.isEmpty()) {
+//	        throw new com.mymart.storeservice.exceptions.
+			return null;
 	    }
 		
 //		Branch branch = branches.get();
@@ -72,7 +73,7 @@ public class BranchServiceImpl implements BranchService{
 //		
 //		return branchResponseDto;
 		
-		return branches.map(branch -> modelMapper.map(branch, BranchCreateRes.class)).orElse(null);
+		return branch.map(b -> modelMapper.map(b, BranchCreateRes.class)).orElse(null);
 	}
 
 	@Override
