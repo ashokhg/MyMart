@@ -45,7 +45,9 @@ public class BranchController {
 		if(bindingResult.hasErrors()) {
 			return 	ResponseEntity.badRequest().body(
 					
-						bindingResult.getFieldErrors().stream().map(error -> error.getField() + ": "+ error.getDefaultMessage()).toList()
+						bindingResult.getFieldErrors().stream()
+													.map(error -> error.getField() + ": "+ error.getDefaultMessage())
+													.toList()
 					);
 					
 		}
@@ -70,10 +72,18 @@ public class BranchController {
 	}
 	
 	@PutMapping("/update/{branchId}")
-	public ResponseEntity<BranchCreateRes> updateBranch(@PathVariable String branchId, @RequestBody BranchCreateReq branchDto){
+	public ResponseEntity<?> updateBranch(@Valid @PathVariable String branchId, @RequestBody BranchCreateReq branchDto, BindingResult bindingResult){
 		
 		BranchCreateRes branchResponseDto = branchService.updateBranch(branchDto, branchId);
 		
+		if(bindingResult.hasErrors()) {
+			return ResponseEntity.badRequest().body(
+					bindingResult.getFieldErrors().stream()
+													.map(error -> error.getField() +": "+error.getDefaultMessage())
+													.toList()
+					
+					);
+		}
 		return ResponseEntity.ok().body(branchResponseDto);
 	}
 	
