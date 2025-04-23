@@ -25,11 +25,14 @@ import com.mymart.storeservice.dto.BranchUpdateReq;
 import com.mymart.storeservice.dto.BranchUpdateRes;
 import com.mymart.storeservice.service.BranchService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/branch")
+@Tag(name = "Branch management", description = "APIs for managing branches")
 public class BranchController {
 
 //	private static final Logger LOGGER =
@@ -38,6 +41,7 @@ public class BranchController {
 	BranchService branchService;
 	
 	@PostMapping("/create-branch")
+	@Operation(summary = "Create a branch", description = "This API creates a new branch")
 	public ResponseEntity<?> createBranch(@Valid @RequestBody BranchCreateReq branchDto, BindingResult bindingResult) {
 				
 		BranchCreateRes branchResponseDto = branchService.storeBranch(branchDto);
