@@ -8,22 +8,22 @@ public class BranchCreateRes {
 	@Schema( description = "System generated unique identifier", example = "52")
 	private Long id;
 	
-	@Schema( description = "Creted branch name")
+	@Schema( description = "Created branch name")
 	private String name;
 	
-	@Schema( description = "Creted branch location")
+	@Schema( description = "Created branch location")
 	private LocationDto location;
 	
-	@Schema( description = "Creted branch contact number")
+	@Schema( description = "Created branch contact number")
 	private String contactNumber;
 	
-	@Schema( description = "Creted branch manager's email")
+	@Schema( description = "Created branch manager's email")
 	private String email;
 	
-	@Schema( description = "Creted branch manager's name")
+	@Schema( description = "Created branch manager's name")
 	private String managerName;
 	
-	@Schema( description = "Creted branch active status")
+	@Schema( description = "Created branch active status")
 	private boolean isActive;
 	
 	public Long getId() {
