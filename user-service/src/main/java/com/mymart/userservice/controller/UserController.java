@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/user")
 public class UserController {
 
-	@GetMapping("/test")
+	@GetMapping("/create-admin-user")
 	public String testUser(HttpServletRequest request) {
 		Enumeration<String> headers = request.getHeaderNames();
 		while(headers.hasMoreElements()) {

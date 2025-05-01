@@ -10,8 +10,8 @@ import jakarta.validation.constraints.Size;
 public class BranchCreateReq {
 
 	@Schema(
-	        description  = "Human‑readable branch name",
-	        example       = "Mumbai‑Andheri",
+	        description  = "Human readable branch name",
+	        example       = "Mumbai Andheri",
 	        requiredMode  = Schema.RequiredMode.REQUIRED
 	    )
 	@NotBlank(message = "Name is required")
