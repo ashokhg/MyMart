@@ -4,6 +4,10 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,6 +38,19 @@ public class JwtFilter extends OncePerRequestFilter{
 		if(authHeader != null && authHeader.startsWith("Bearer ")) {
 			token = authHeader.substring(7);
 			userName = jwtServiceImpl.extractUserName(token);
+		}
+		
+		if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			System.out.println("Inside if User Name is not null");
+			UserDetails userDetails = applicationContext.getBean(MyUserDetailsServic .class).loadUserByUsername(userName);
+			if (jwtServiceImpl.validateToken(token, userDetails)) {
+
+				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+
+				authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+			}
 		}
 	}
 
