@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Roles {
@@ -14,6 +15,9 @@ public class Roles {
 	
 	private String name;
 	private String description;
+	
+	@OneToMany(mappedBy = "roles")
+	private User users;
 	
 	public Long getId() {
 		return id;
@@ -32,5 +36,11 @@ public class Roles {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public User getUsers() {
+		return users;
+	}
+	public void setUsers(User users) {
+		this.users = users;
 	}
 }
