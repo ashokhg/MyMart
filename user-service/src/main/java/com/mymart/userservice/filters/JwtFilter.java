@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.mymart.userservice.service.JwtServiceImpl;
+import com.mymart.userservice.service.MyUserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter{
 		
 		if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 			System.out.println("Inside if User Name is not null");
-			UserDetails userDetails = applicationContext.getBean(MyUserDetailsServic .class).loadUserByUsername(userName);
+			UserDetails userDetails = applicationContext.getBean(MyUserDetailsService.class).loadUserByUsername(userName);
 			if (jwtServiceImpl.validateToken(token, userDetails)) {
 
 				UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

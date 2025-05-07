@@ -1,5 +1,7 @@
 package com.mymart.userservice.entity;
 
+import java.util.Set;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,8 +18,8 @@ public class Roles {
 	private String name;
 	private String description;
 	
-	@OneToMany(mappedBy = "roles")
-	private User users;
+	@OneToMany(mappedBy = "role")
+	private Set<User> users;
 	
 	public Long getId() {
 		return id;
@@ -37,10 +39,10 @@ public class Roles {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public User getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
-	public void setUsers(User users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 }
